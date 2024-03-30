@@ -1,5 +1,6 @@
-export class StudentsEntity {
+export class AdminsEntity {
   id: string;
+  levelId: number;
   email: string;
   name: string;
   password: string;
@@ -10,9 +11,7 @@ export class StudentsEntity {
   updatedAt: Date;
 }
 
-export class StudentsSubscribesEntity {
+export class AdminLevelsEntity {
   id: number;
-  studentId: string;
-  schoolId: number;
-  createdAt: string;
+  description: string;
 }
