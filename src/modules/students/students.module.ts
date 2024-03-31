@@ -4,6 +4,7 @@ import { StudentsService } from "./students.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { StudentsEntity } from "src/models/students.entity";
 import { AuthModule } from "../auth/auth.module";
+import { StudentsStrategy } from "src/guards/students.strategy";
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { AuthModule } from "../auth/auth.module";
     AuthModule,
   ],
   controllers: [StudentsController],
-  providers: [StudentsService],
+  providers: [StudentsService, StudentsStrategy],
   exports: [StudentsService]
 })
 export class StudentsModule {}

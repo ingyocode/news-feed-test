@@ -1,10 +1,12 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, HttpStatus, Post, Req, UseGuards } from "@nestjs/common";
 import { StudentsSignInRequestDto } from "./dtos/requests/students-sign-in-request.dto";
 import { StudentsService } from "./students.service";
 import { AuthService } from "../auth/auth.service";
 import { StudentsSignInResponseDto } from "./dtos/responses/students.sign-in-response.dto";
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { StudentsSignUpRequestDto } from "./dtos/requests/students-sign-up-request.dto";
+import { StudentsTokenInterface } from "../auth/interfaces/students-token.interface";
+import { UseStudentsToken } from "src/decorators/students-token.decorator";
 
 @ApiTags('students')
 @Controller('students')
@@ -19,7 +21,7 @@ export class StudentsController {
     status: 201,
     type: StudentsSignInResponseDto,
   })
-  @Post('auth/students/sign-in')
+  @Post('auth/sign-in')
   async studentsSignIn(
     @Body() body: StudentsSignInRequestDto,
   ): Promise<StudentsSignInResponseDto> {
@@ -56,7 +58,7 @@ export class StudentsController {
     status: 201,
     type: StudentsSignInResponseDto,
   })
-  @Post('auth/students/sign-up')
+  @Post('auth/sign-up')
   async studentsSignUp(
     @Body() body: StudentsSignUpRequestDto,
   ): Promise<StudentsSignInResponseDto> {
@@ -87,11 +89,8 @@ export class StudentsController {
       }),
     }
   }
-  
-  async getSchoolList() {}
+  async cancelSubscribeSchool() {}
   async getSchoolNews() {}
-  async subscribe() {}
-  async cancelSubscribe() {}
 
   async getNewsFeed() {}
   async saveNewsFeed() {} // TODO: working in serverless. Cron?

@@ -8,3 +8,6 @@ CREATE TABLE news(
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE INDEX news_school_id_idx on news(school_id);
+CREATE INDEX news_writer_id_idx on news(writer_id);
+CREATE INDEX news_is_deleted_idx on news(is_deleted);

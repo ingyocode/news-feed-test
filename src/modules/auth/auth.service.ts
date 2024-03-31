@@ -16,7 +16,7 @@ export class AuthService {
     return this.jwtService.sign({ ...params })
   }
   issueAdminsToken(params: AdminsTokenInterface): string {
-    return this.jwtService.sign({ ...params })
+    return this.jwtService.sign({ ...params, isAdmin: true })
   }
 
   hashPassword(

@@ -36,7 +36,8 @@ export class AdminsService {
         salt: passwordInfo.salt
       });
       return true;
-    } catch {
+    } catch(err) {
+      console.log(err);
       return false;
     }
   }

@@ -5,8 +5,8 @@ export class SchoolsEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ type: 'varchar', array: true, nullable: false })
-  adminIds: string[];
+  @Column({ type: 'varchar', nullable: false })
+  adminId: string;
 
   @Column({ type: 'varchar', nullable: false })
   region: string;

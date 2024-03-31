@@ -19,7 +19,7 @@ export class AdminsController {
     status: 201,
     type: AdminsSignInResponseDto
   })
-  @Post('admins/sign-in')
+  @Post('auth/sign-in')
   async adminsSignIn(
     @Body() body: AdminsSignInRequestDto,
   ): Promise<AdminsSignInResponseDto> {
@@ -41,6 +41,7 @@ export class AdminsController {
         id: admin.id,
         email: admin.email,
         name: admin.name,
+        isAdmin: true,
       }),
     }
   }
@@ -50,7 +51,7 @@ export class AdminsController {
     status: 201,
     type: AdminsSignInResponseDto
   })
-  @Post('admins/sign-up')
+  @Post('auth/sign-up')
   async adminsSignUp(
     @Body() body: AdminsSignUpRequestDto,
   ): Promise<AdminsSignInResponseDto> {
@@ -65,7 +66,7 @@ export class AdminsController {
       password: body.password,
     });
     if(!result) {
-      throw new HttpException('failed to save student info', HttpStatus.CONFLICT);
+      throw new HttpException('failed to save admin info', HttpStatus.CONFLICT);
     }
 
     const admin = await this.adminsService.getAdmin(body.email);
@@ -77,7 +78,8 @@ export class AdminsController {
       token: this.authService.issueAdminsToken({
         id: admin.id,
         email: admin.email,
-        name: admin.name
+        name: admin.name,
+        isAdmin: true,
       }),
     }
   }
