@@ -3,9 +3,10 @@ import { StudentsSignInRequestDto } from "./dtos/requests/students-sign-in-reque
 import { StudentsService } from "./students.service";
 import { AuthService } from "../auth/auth.service";
 import { StudentsSignInResponseDto } from "./dtos/responses/students.sign-in-response.dto";
-import { ApiOkResponse, ApiOperation } from "@nestjs/swagger";
+import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { StudentsSignUpRequestDto } from "./dtos/requests/students-sign-up-request.dto";
 
+@ApiTags('students')
 @Controller('students')
 export class StudentsController {
   constructor(

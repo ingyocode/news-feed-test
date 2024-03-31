@@ -18,6 +18,7 @@ export class StudentsService {
     return this.studentsRepository.findOne({
       where: {
         email,
+        isDeleted: false,
       }
     });
   }

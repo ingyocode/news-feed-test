@@ -1,6 +1,5 @@
 CREATE TABLE admins(
   id VARCHAR(36) PRIMARY KEY,
-  level_id INT NOT NULL,
   email VARCHAR(50) NOT NULL,
   name VARCHAR(50) NOT NULL,
   password VARCHAR(200) NOT NULL,
@@ -8,9 +7,4 @@ CREATE TABLE admins(
   is_deleted BOOL NOT NULL DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE admin_levels(
-  id SERIAL PRIMARY KEY,
-  description VARCHAR(300)
 );
