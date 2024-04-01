@@ -6,15 +6,17 @@ import { SchoolsModule } from './schools/schools.module';
 import { StudentsModule } from './students/students.module';
 import { DatabaseConfigModule } from './databases/databases.module';
 import { GlobalConfigModule } from './configs/global-config.module';
+import { NewsModule } from './news/news.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     GlobalConfigModule,
     DatabaseConfigModule,
 
-    AdminsMoudle,
+    AuthModule,
     SchoolsModule,
-    StudentsModule
+    NewsModule,
   ],
   providers: [
     {

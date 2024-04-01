@@ -1,18 +1,16 @@
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-
+import { randomBytes, pbkdf2Sync } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminsEntity } from 'src/models/admins.entity';
-import { AdminsSignUpRequestDto } from './dtos/requests/admins-sign-up-request.dto';
-import { AuthService } from '../auth/auth.service';
+import { AdminsSignUpRequestDto } from '../auth/dtos/requests/auth-admins-sign-up-request.dto';
 
 @Injectable()
 export class AdminsService {
   constructor(
     @InjectRepository(AdminsEntity)
     private readonly adminsRepository: Repository<AdminsEntity>,
-    private readonly authService: AuthService,
   ) {}
 
   async getAdmin(email: string): Promise<AdminsEntity> {
@@ -26,7 +24,7 @@ export class AdminsService {
 
   async createAdmin(params: AdminsSignUpRequestDto): Promise<boolean> {
     try {
-      const passwordInfo = this.authService.hashPassword(params.password);
+      const passwordInfo = this.hashPassword(params.password);
 
       await this.adminsRepository.save({
         id: uuidv4(),
@@ -40,5 +38,18 @@ export class AdminsService {
       console.log(err);
       return false;
     }
+  }
+
+  hashPassword(
+    password: string,
+    passwordSalt?: string,
+  ): { password: string; salt: string } {
+    const salt = passwordSalt || randomBytes(64).toString('base64'),
+      encryptPassword =
+        password && pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
+    return {
+      password: encryptPassword,
+      salt,
+    };
   }
 }
