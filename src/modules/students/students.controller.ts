@@ -89,9 +89,9 @@ export class StudentsController {
       }),
     }
   }
-  async cancelSubscribeSchool() {}
-  async getSchoolNews() {}
 
+  // news
+  async getSchoolNews() {}
   async getNewsFeed() {}
   async saveNewsFeed() {} // TODO: working in serverless. Cron?
 }

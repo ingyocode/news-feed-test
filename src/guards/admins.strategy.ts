@@ -20,13 +20,14 @@ export class AdminStrategy extends PassportStrategy(Strategy, AdminGuardStrategy
   async validate(token: AdminsTokenInterface) {
     try {
       if(!token.isAdmin) {
-        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+        throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
       }
 
       const user = {
         id: token.id,
         email: token.email,
         name: token.name,
+        isAdmin: token.isAdmin,
       };
       return user;
     } catch (e) {

@@ -20,6 +20,10 @@ export class StudentsStrategy extends PassportStrategy(Strategy, StudentGuardStr
 
   async validate(token: StudentsTokenInterface) {
     try {
+      if(token.isAdmin) {
+        throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      }
+
       const user = {
         id: token.id,
         email: token.email,

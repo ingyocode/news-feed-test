@@ -14,16 +14,44 @@ export class SchoolsService {
     private readonly studentSubscribesRepository: Repository<StudentSubscribesEntity>,
   ) {}
 
+  async getSchool(region: string, name: string): Promise<SchoolsEntity> {
+    return this.schoolsRepository.findOne({
+      where: {
+        region,
+        name,
+        isDeleted: false,
+      }
+    });
+  }
+
+  async createSchool(region: string, name: string, adminId: string) {
+    try {
+      await this.schoolsRepository.upsert(
+        { region, name, adminId, isDeleted: false },
+        { conflictPaths: ['region', 'name'], upsertType: 'on-conflict-do-update' }
+      );
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
   async getSubscribedSchoolList(studentId: string): Promise<SchoolsEntity[]> {
     const subscribeList = await this.studentSubscribesRepository.find({
+      select: {
+        schoolId: true,
+      },
       where: {
         studentId,
-      }
+        isDeleted: false,
+      },
     });
 
     return this.schoolsRepository.find({
       where: {
-        id: In(subscribeList.map((subscribe) => subscribe.schoolId))
+        id: In(subscribeList.map((subscribe) => subscribe.schoolId)),
+        isDeleted: false,
       }
     });
   }
@@ -33,16 +61,30 @@ export class SchoolsService {
       where: {
         studentId,
         schoolId,
+        isDeleted: false,
       }
     });
   }
 
   async subscribeSchool(studentId: string, schoolId: number): Promise<boolean> {
     try {
-      await this.studentSubscribesRepository.save({
-        studentId,
-        schoolId,
-      });
+      await this.studentSubscribesRepository.upsert(
+        { studentId, schoolId, isDeleted: false },
+        { conflictPaths: ['studentId', 'schoolId'], upsertType: 'on-conflict-do-update' },
+      )
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async cancelSubscribe(studentId: string, schoolId: number) {
+    try {
+      await this.studentSubscribesRepository.upsert(
+        { studentId, schoolId, isDeleted: true },
+        { conflictPaths: ['studentId', 'schoolId'], upsertType: 'on-conflict-do-update' },
+      );
       return true;
     } catch (err) {
       console.log(err);
@@ -53,7 +95,8 @@ export class SchoolsService {
   async createSchoolPage(region: string, schoolName: string) {
     await this.schoolsRepository.save({
       region,
-      name: schoolName
-    })
+      name: schoolName,
+      isDeleted: false,
+    });
   }
 }
