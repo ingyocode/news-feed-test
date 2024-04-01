@@ -16,19 +16,6 @@ export class AuthService {
     return this.jwtService.sign({ ...params })
   }
   issueAdminsToken(params: AdminsTokenInterface): string {
-    return this.jwtService.sign({ ...params })
-  }
-
-  hashPassword(
-    password: string,
-    passwordSalt?: string,
-  ): { password: string; salt: string } {
-    const salt = passwordSalt || randomBytes(64).toString('base64'),
-      encryptPassword =
-        password && pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
-    return {
-      password: encryptPassword,
-      salt,
-    };
+    return this.jwtService.sign({ ...params, isAdmin: true })
   }
 }
