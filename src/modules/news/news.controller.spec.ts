@@ -152,7 +152,7 @@ describe('NewsController Test', () => {
     });
   });
 
-  describe('DELETE /news/:schoolId/:newsId', () => {
+  describe('PUT /news/:schoolId/:newsId', () => {
     const decodedToken: { user:AdminsTokenInterface } = { 
       user: { 
         id: 'adminId',
@@ -286,7 +286,7 @@ describe('NewsController Test', () => {
     });
   });
 
-  describe('PUT /news/:schoolId/:newsId', () => {
+  describe('DELETE /news/:schoolId/:newsId', () => {
     const decodedToken: { user:AdminsTokenInterface } = { 
       user: { 
         id: 'adminId',
