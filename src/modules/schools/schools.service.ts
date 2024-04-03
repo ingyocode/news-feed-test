@@ -99,4 +99,12 @@ export class SchoolsService {
       isDeleted: false,
     });
   }
+
+  async getSchoolWithId(schoolId: number): Promise<SchoolsEntity> {
+    return this.schoolsRepository.findOne({
+      where: {
+        id: schoolId,
+      }
+    });
+  }
 }
