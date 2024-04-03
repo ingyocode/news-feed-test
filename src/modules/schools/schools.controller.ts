@@ -88,9 +88,4 @@ export class SchoolsController {
     }
     return await  this.schoolsService.getSchool(body.region, body.name);
   }
-  
-  // news
-  async createSchoolNews() {}
-  async editSchoolNews() {}
-  async deleteSchoolNews() {}
 }
