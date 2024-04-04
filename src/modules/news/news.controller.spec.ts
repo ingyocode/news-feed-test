@@ -1,14 +1,14 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { Test, TestingModule } from '@nestjs/testing';
+
+import { NewsEntity } from "src/models/news.entity";
 import { AdminsTokenInterface } from "../auth/interfaces/admins-token.interface";
 import { SchoolsService } from "../schools/schools.service";
 import { CreateNewsRequestBodyDto } from "./dtos/requests/create-news-request-body.dto";
 import { SchoolIdRequestParamDto } from "./dtos/requests/school-id-request-param.dto";
 import { NewsController } from "./news.controller";
-import { Test, TestingModule } from '@nestjs/testing';
 import { NewsService } from "./news.service";
-import { SchoolsModule } from "../schools/schools.module";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { NewsEntity } from "src/models/news.entity";
 import { SchoolsEntity } from "src/models/schools.entity";
 import { DatabaseConfigModule } from "../databases/databases.module";
 import { GlobalConfigModule } from "../configs/global-config.module";
@@ -16,7 +16,6 @@ import { StudentSubscribesEntity } from "src/models/student-subscribes.entity";
 import { CreateSuccessNewsResponseDto } from "./dtos/responses/create-success-news-response.dto";
 import { SchoolNewsIdRequestParamDto } from "./dtos/requests/school-news-id-request-param.dto";
 import { UpdateNewsRequestBodyDto } from "./dtos/requests/update-news-request-body.dto";
-import { NewsFeedsEntity } from "src/models/news-feeds.entity";
 import { NewsFeedsModule } from "../\bnews-feeds/news-feeds.module";
 
 describe('NewsController Test', () => {
