@@ -1,18 +1,31 @@
-export class StudentsEntity {
-  id: string;
-  email: string;
-  name: string;
-  password: string;
-  salt: string;
-  isDeleted: boolean;
-  lastLoginedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import { Column, CreateDateColumn, Entity, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export class StudentsSubscribesEntity {
-  id: number;
-  studentId: string;
-  schoolId: number;
-  createdAt: string;
+@Entity('students')
+export class StudentsEntity {
+  @PrimaryColumn({ type: 'varchar' })
+  id: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  email: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  name: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  password: string;
+
+  @Column({ type: 'varchar', nullable: false })
+  salt: string;
+
+  @Column({ type: 'bool', nullable: false, default: false })
+  isDeleted: boolean;
+
+  @Column({ type: 'timestamp', nullable: false })
+  lastLoginedAt: Date;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
