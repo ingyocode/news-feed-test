@@ -8,5 +8,5 @@ CREATE TABLE schools(
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   UNIQUE (region, name)
 );
-CREATE INDEX schools_admins_id_idx on schools(admins_id);
+CREATE INDEX schools_admin_id_idx on schools(admin_id);
 CREATE INDEX schools_is_deleted_idx on schools(is_deleted);

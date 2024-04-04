@@ -40,12 +40,10 @@ export class NewsService {
     .getRawMany<NewsResponseDto>();
   }
 
-  async createNews(params: CreateNewsParamInterface): Promise<boolean> {
+  async createNews(params: CreateNewsParamInterface): Promise<NewsEntity | false> {
     try {
-      await this.newsRepository.save(params);
-      return true;
+      return await this.newsRepository.save(params);
     } catch (err) {
-      console.log(err);
       return false;
     }
   }
@@ -55,17 +53,15 @@ export class NewsService {
       await this.newsRepository.update({ id: newsId }, { ...params })
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
   }
 
-  async deleteNews(newsId: number) {
+  async deleteNews(newsId: number): Promise<boolean> {
     try {
       await this.newsRepository.update({ id: newsId }, { isDeleted: false })
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
   }

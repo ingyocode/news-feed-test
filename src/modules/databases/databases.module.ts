@@ -11,11 +11,11 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
       useFactory: async (configService: ConfigService) => ({
         type: 'postgres',
         host: configService.get('typeorm.host') || 'localhost',
-        port: configService.get('typeorm.port') || 3306,
+        port: +configService.get('typeorm.port') || 3306,
         database: configService.get('typeorm.database') || 'tempDb',
         username: configService.get('typeorm.username') || 'root',
         password: configService.get('typeorm.password') || 'tempPassword',
-        logging: configService.get('typeorm.logging') || true,
+        logging: Boolean(configService.get('typeorm.logging')) || true,
         namingStrategy: new SnakeNamingStrategy(),
         entities: [__dirname + '/../../**/*.entity.{js,ts}'],
       }),

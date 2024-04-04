@@ -2,7 +2,7 @@ import { ApiProperty } from "@nestjs/swagger";
 import { Type } from "class-transformer";
 import { IsNumber } from "class-validator";
 
-export class GetNewsRequestQueryDto {
+export class PaginationRequestQueryDto {
   @ApiProperty({ description: 'offset page' })
   @Type(() => Number)
   @IsNumber()

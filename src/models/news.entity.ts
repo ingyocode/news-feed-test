@@ -26,5 +26,3 @@ export class NewsEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-
-// TODO: news feed
