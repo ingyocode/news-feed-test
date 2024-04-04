@@ -24,9 +24,10 @@ export class NewsFeedsService {
       .where('news_feeds.student_id = :studentId', { studentId })
       .offset((page - 1) * limit)
       .limit(limit)
+      .orderBy('news.created_at', 'DESC')
       .getRawMany<NewsEntity>();
   }
-// TODO: working in serverless
+
   async saveNewsFeeds(studentIds: string[], newsId: number): Promise<boolean> {
     try {
       await this.newsFeedsRepository.save(

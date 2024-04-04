@@ -1,7 +1,7 @@
 {
   "name": "news-feed-be",
   "version": "0.0.1",
-  "description": "",
+  "description": "news feed backend api",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -11,13 +11,9 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:cov": "jest --coverage"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

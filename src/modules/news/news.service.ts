@@ -22,7 +22,7 @@ export class NewsService {
     });
   }
 
-  async getNewsList(studentId: string, page: number, limit: number): Promise<NewsResponseDto[]> {
+  async getNewsList(studentId: string, schoolId: number, page: number, limit: number): Promise<NewsResponseDto[]> {
     return this.newsRepository.createQueryBuilder('news')
     .select('news.id', 'id')
     .addSelect('news.title', 'title')
@@ -34,6 +34,7 @@ export class NewsService {
     .leftJoin('schools', 'schools', 'schools.id = news.school_id AND schools.is_deleted = false')
     .leftJoin('admins', 'admins', 'admins.id = news.writer_id AND admins.is_deleted = false')
     .leftJoin('student_subscribes', 'subscribes', 'subscribes.school_id = schools.id AND subscribes.is_deleted = false AND subscribes.student_id = :studentId', { studentId })
+    .where('news.school_id = :schoolId', { schoolId })
     .offset((page - 1) * limit)
     .limit(limit)
     .orderBy('news.created_at', 'DESC')
