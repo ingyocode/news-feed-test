@@ -32,12 +32,22 @@ export class SchoolsService {
       );
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
   }
 
-  async getSubscribedSchoolList(studentId: string): Promise<SchoolsEntity[]> {
+  async getSubscribeList(schoolId: number): Promise<StudentSubscribesEntity[]> {
+    const subscribeList: StudentSubscribesEntity[] = await this.studentSubscribesRepository.find({
+      where: {
+        schoolId,
+        isDeleted: false,
+      }
+    });
+
+    return subscribeList;
+  }
+
+  async getUserSubscribedSchoolList(studentId: string): Promise<SchoolsEntity[]> {
     const subscribeList = await this.studentSubscribesRepository.find({
       select: {
         schoolId: true,
@@ -74,12 +84,11 @@ export class SchoolsService {
       )
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
   }
 
-  async cancelSubscribe(studentId: string, schoolId: number) {
+  async cancelSubscribe(studentId: string, schoolId: number): Promise<boolean> {
     try {
       await this.studentSubscribesRepository.upsert(
         { studentId, schoolId, isDeleted: true },
@@ -87,24 +96,15 @@ export class SchoolsService {
       );
       return true;
     } catch (err) {
-      console.log(err);
       return false;
     }
-  }
-
-  async createSchoolPage(region: string, schoolName: string) {
-    await this.schoolsRepository.save({
-      region,
-      name: schoolName,
-      isDeleted: false,
-    });
   }
 
   async getSchoolWithId(schoolId: number): Promise<SchoolsEntity> {
     return this.schoolsRepository.findOne({
       where: {
         id: schoolId,
-      }
+      },
     });
   }
 }

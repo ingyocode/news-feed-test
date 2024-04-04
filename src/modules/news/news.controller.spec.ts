@@ -16,6 +16,8 @@ import { StudentSubscribesEntity } from "src/models/student-subscribes.entity";
 import { CreateSuccessNewsResponseDto } from "./dtos/responses/create-success-news-response.dto";
 import { SchoolNewsIdRequestParamDto } from "./dtos/requests/school-news-id-request-param.dto";
 import { UpdateNewsRequestBodyDto } from "./dtos/requests/update-news-request-body.dto";
+import { NewsFeedsEntity } from "src/models/news-feeds.entity";
+import { NewsFeedsModule } from "../\bnews-feeds/news-feeds.module";
 
 describe('NewsController Test', () => {
   let newsController: NewsController;
@@ -27,6 +29,7 @@ describe('NewsController Test', () => {
       imports: [
         GlobalConfigModule,
         DatabaseConfigModule,
+        NewsFeedsModule,
         TypeOrmModule.forFeature([
           NewsEntity,
           SchoolsEntity,
@@ -60,6 +63,16 @@ describe('NewsController Test', () => {
     };
     const exampleRequestParams:SchoolIdRequestParamDto = {
       schoolId: 1,
+    };
+    const exampleCreateSuccessResponse: NewsEntity = {
+      id: 0,
+      schoolId: 0,
+      writerId: "testWriter",
+      title: "testTiel",
+      content: "testContent",
+      isDeleted: false,
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
     it('request invalid school id', async () => {
@@ -135,18 +148,17 @@ describe('NewsController Test', () => {
         createdAt: new Date(),
         updatedAt: new Date()
       };
-      const successResponse:CreateSuccessNewsResponseDto = { result: true };
 
       const schoolsServicegetSchoolWithIdSpy = jest
         .spyOn(schoolsService, 'getSchoolWithId')
         .mockResolvedValue(exampleSchoolInfo);
       const newsServiceCreateNewsSpy = jest
         .spyOn(newsService, 'createNews')
-        .mockResolvedValue(true);
+        .mockResolvedValue(exampleCreateSuccessResponse);
 
       const result = await newsController.createSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
 
-      expect(result).toEqual(successResponse)
+      expect(result).toEqual(exampleCreateSuccessResponse)
       expect(schoolsServicegetSchoolWithIdSpy).toHaveBeenCalled();
       expect(newsServiceCreateNewsSpy).toHaveBeenCalled();
     });
