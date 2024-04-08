@@ -23,11 +23,11 @@ TYPEORM_LOGGING=true
 
 JWT_SECRET_KEY=Q&yuu84gQZwgSnJ
 ```
-
-2. `npm i` 명령어를 이용하여 모듈 설치
-3. `npm run start`를 이용하여 서버 실행
-4. `http://localhost:3000/documentation`사이트에서 api 문서 확인
-5. `npm run test`를 이용하여 테스트 코드 실행
+2. 코드 내에 적혀진 sql 문들을 이용하여 table, index 등을 생성
+3. `npm i` 명령어를 이용하여 모듈 설치
+4. `npm run start`를 이용하여 서버 실행
+5. `http://localhost:3000/documentation`사이트에서 api 문서 확인
+6. `npm run test`를 이용하여 테스트 코드 실행
 
 ## 구현
 
