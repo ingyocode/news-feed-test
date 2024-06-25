@@ -19,7 +19,7 @@ export class StudentsService {
       where: {
         email,
         isDeleted: false,
-      }
+      },
     });
   }
 
@@ -32,7 +32,7 @@ export class StudentsService {
         email: params.email,
         name: params.name,
         password: passwordInfo.password,
-        salt: passwordInfo.salt
+        salt: passwordInfo.salt,
       });
       return true;
     } catch {
@@ -42,9 +42,12 @@ export class StudentsService {
 
   async updateLastLoginedAt(studentId: string): Promise<boolean> {
     try {
-      await this.studentsRepository.update({ id: studentId }, {
-        lastLoginedAt: new Date(),
-      });
+      await this.studentsRepository.update(
+        { id: studentId },
+        {
+          lastLoginedAt: new Date(),
+        },
+      );
       return true;
     } catch {
       return false;
@@ -57,7 +60,8 @@ export class StudentsService {
   ): { password: string; salt: string } {
     const salt = passwordSalt || randomBytes(64).toString('base64'),
       encryptPassword =
-        password && pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
+        password &&
+        pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
     return {
       password: encryptPassword,
       salt,

@@ -1,15 +1,21 @@
-import { Body, Controller, HttpException, HttpStatus, Post } from "@nestjs/common";
-import { ApiOperation, ApiOkResponse, ApiTags } from "@nestjs/swagger";
-import { AdminsService } from "../admins/admins.service";
-import { AdminsSignInRequestDto } from "./dtos/requests/auth-admins-sign-in-request.dto";
+import {
+  Body,
+  Controller,
+  HttpException,
+  HttpStatus,
+  Post,
+} from '@nestjs/common';
+import { ApiOperation, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { AdminsService } from '../admins/admins.service';
+import { AdminsSignInRequestDto } from './dtos/requests/auth-admins-sign-in-request.dto';
 
-import { AdminsSignInResponseDto } from "./dtos/responses/auth-admins-sign-in-response.dto";
-import { AuthService } from "./auth.service";
-import { StudentsService } from "../students/students.service";
-import { StudentsSignInRequestDto } from "./dtos/requests/auth-students-sign-in-request.dto";
-import { StudentsSignUpRequestDto } from "./dtos/requests/auth-students-sign-up-request.dto";
-import { StudentsSignInResponseDto } from "./dtos/responses/auth-students-sign-in-response.dto";
-import { AdminsSignUpRequestDto } from "./dtos/requests/auth-admins-sign-up-request.dto";
+import { AdminsSignInResponseDto } from './dtos/responses/auth-admins-sign-in-response.dto';
+import { AuthService } from './auth.service';
+import { StudentsService } from '../students/students.service';
+import { StudentsSignInRequestDto } from './dtos/requests/auth-students-sign-in-request.dto';
+import { StudentsSignUpRequestDto } from './dtos/requests/auth-students-sign-up-request.dto';
+import { StudentsSignInResponseDto } from './dtos/responses/auth-students-sign-in-response.dto';
+import { AdminsSignUpRequestDto } from './dtos/requests/auth-admins-sign-up-request.dto';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -23,19 +29,22 @@ export class AuthController {
   @ApiOperation({ summary: 'admin sign in', description: 'admin sign in' })
   @ApiOkResponse({
     status: 201,
-    type: AdminsSignInResponseDto
+    type: AdminsSignInResponseDto,
   })
   @Post('admin/sign-in')
   async adminsSignIn(
     @Body() body: AdminsSignInRequestDto,
   ): Promise<AdminsSignInResponseDto> {
     const admin = await this.adminsService.getAdmin(body.email);
-    if(!admin) {
+    if (!admin) {
       throw new HttpException('can not find admin', HttpStatus.BAD_REQUEST);
     }
 
-    const requestPassword = this.adminsService.hashPassword(body.password ,admin.salt);
-    if(requestPassword.password !== admin.password) {
+    const requestPassword = this.adminsService.hashPassword(
+      body.password,
+      admin.salt,
+    );
+    if (requestPassword.password !== admin.password) {
       throw new HttpException('can not find admin', HttpStatus.BAD_REQUEST);
     }
 
@@ -49,20 +58,20 @@ export class AuthController {
         name: admin.name,
         isAdmin: true,
       }),
-    }
+    };
   }
 
   @ApiOperation({ summary: 'admin sign up', description: 'create admin' })
   @ApiOkResponse({
     status: 201,
-    type: AdminsSignInResponseDto
+    type: AdminsSignInResponseDto,
   })
   @Post('admin/sign-up')
   async adminsSignUp(
     @Body() body: AdminsSignUpRequestDto,
   ): Promise<AdminsSignInResponseDto> {
     const existedAdmin = await this.adminsService.getAdmin(body.email);
-    if(existedAdmin) {
+    if (existedAdmin) {
       throw new HttpException('already use this email', HttpStatus.BAD_REQUEST);
     }
 
@@ -71,7 +80,7 @@ export class AuthController {
       name: body.name,
       password: body.password,
     });
-    if(!result) {
+    if (!result) {
       throw new HttpException('failed to save admin info', HttpStatus.CONFLICT);
     }
 
@@ -87,10 +96,13 @@ export class AuthController {
         name: admin.name,
         isAdmin: true,
       }),
-    }
+    };
   }
 
-  @ApiOperation({ summary: 'student user sign in', description: 'student sign in' })
+  @ApiOperation({
+    summary: 'student user sign in',
+    description: 'student sign in',
+  })
   @ApiOkResponse({
     status: 201,
     type: StudentsSignInResponseDto,
@@ -100,19 +112,23 @@ export class AuthController {
     @Body() body: StudentsSignInRequestDto,
   ): Promise<StudentsSignInResponseDto> {
     const student = await this.studentsService.getStudent(body.email);
-    if(!student) {
+    if (!student) {
       throw new HttpException('can not find user', HttpStatus.BAD_REQUEST);
     }
 
-    const requestPassword = this.studentsService.hashPassword(body.password ,student.salt);
-    if(requestPassword.password !== student.password) {
+    const requestPassword = this.studentsService.hashPassword(
+      body.password,
+      student.salt,
+    );
+    if (requestPassword.password !== student.password) {
       throw new HttpException('can not find user', HttpStatus.BAD_REQUEST);
     }
 
-    if(
-      !(await this.studentsService.updateLastLoginedAt(student.id))
-    ) {
-      throw new HttpException('failed to update user info', HttpStatus.CONFLICT)
+    if (!(await this.studentsService.updateLastLoginedAt(student.id))) {
+      throw new HttpException(
+        'failed to update user info',
+        HttpStatus.CONFLICT,
+      );
     }
 
     return {
@@ -122,12 +138,15 @@ export class AuthController {
       token: this.authService.issueStudentsToken({
         id: student.id,
         email: student.email,
-        name: student.name
+        name: student.name,
       }),
-    }
+    };
   }
 
-  @ApiOperation({ summary: 'student user sign up', description: 'create student' })
+  @ApiOperation({
+    summary: 'student user sign up',
+    description: 'create student',
+  })
   @ApiOkResponse({
     status: 201,
     type: StudentsSignInResponseDto,
@@ -137,7 +156,7 @@ export class AuthController {
     @Body() body: StudentsSignUpRequestDto,
   ): Promise<StudentsSignInResponseDto> {
     const existedStudent = await this.studentsService.getStudent(body.email);
-    if(existedStudent) {
+    if (existedStudent) {
       throw new HttpException('already use this email', HttpStatus.BAD_REQUEST);
     }
 
@@ -146,8 +165,11 @@ export class AuthController {
       name: body.name,
       password: body.password,
     });
-    if(!result) {
-      throw new HttpException('failed to save student info', HttpStatus.CONFLICT);
+    if (!result) {
+      throw new HttpException(
+        'failed to save student info',
+        HttpStatus.CONFLICT,
+      );
     }
 
     const student = await this.studentsService.getStudent(body.email);
@@ -159,8 +181,8 @@ export class AuthController {
       token: this.authService.issueStudentsToken({
         id: student.id,
         email: student.email,
-        name: student.name
+        name: student.name,
       }),
-    }
+    };
   }
 }
