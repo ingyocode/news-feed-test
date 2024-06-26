@@ -2,7 +2,6 @@ import { Module, forwardRef } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DataBaseConfiguration } from './index';
 
-
 @Module({
   imports: [
     forwardRef(() =>

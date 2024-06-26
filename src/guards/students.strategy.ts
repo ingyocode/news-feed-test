@@ -8,19 +8,20 @@ import { StudentGuardStrategy } from 'src/commons/student-strategy-const';
 import { StudentsTokenInterface } from 'src/modules/auth/interfaces/students-token.interface';
 
 @Injectable()
-export class StudentsStrategy extends PassportStrategy(Strategy, StudentGuardStrategy) {
-  constructor(
-    private readonly configService: ConfigService
-  ) {
+export class StudentsStrategy extends PassportStrategy(
+  Strategy,
+  StudentGuardStrategy,
+) {
+  constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<string>('jwt.secretKey')
+      secretOrKey: configService.get<string>('jwt.secretKey'),
     });
   }
 
   async validate(token: StudentsTokenInterface) {
     try {
-      if(token.isAdmin) {
+      if (token.isAdmin) {
         throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
       }
 
