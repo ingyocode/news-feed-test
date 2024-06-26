@@ -22,6 +22,31 @@ export class NewsService {
     });
   }
 
+  async getNewsCount(studentId: string, schoolId: number) {
+    return this.newsRepository
+      .createQueryBuilder('news')
+      .select('news.id', 'id')
+      .leftJoin(
+        'schools',
+        'schools',
+        'schools.id = news.school_id AND schools.is_deleted = false',
+      )
+      .leftJoin(
+        'admins',
+        'admins',
+        'admins.id = news.writer_id AND admins.is_deleted = false',
+      )
+      .leftJoin(
+        'student_subscribes',
+        'subscribes',
+        'subscribes.school_id = schools.id AND subscribes.is_deleted = false AND subscribes.student_id = :studentId',
+        { studentId },
+      )
+      .where('news.school_id = :schoolId', { schoolId })
+      .groupBy('news.id')
+      .getCount();
+  }
+
   async getNewsList(
     studentId: string,
     schoolId: number,

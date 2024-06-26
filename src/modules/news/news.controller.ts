@@ -31,6 +31,7 @@ import { UpdateNewsRequestBodyDto } from './dtos/requests/update-news-request-bo
 import { SchoolNewsIdRequestParamDto } from './dtos/requests/school-news-id-request-param.dto';
 import { NewsFeedsService } from '../\bnews-feeds/news-feed.service';
 import { GetSchoolNewsParamRequestDto } from './dtos/requests/get-school-news-param.dto';
+import { PaginationResponseDto } from 'src/dtos/pagination-response.dto';
 
 @ApiTags('news')
 @Controller('news')
@@ -52,15 +53,26 @@ export class NewsController {
     @Req() req: { user: StudentsTokenInterface },
     @Query() query: PaginationRequestQueryDto,
     @Param() param: GetSchoolNewsParamRequestDto,
-  ): Promise<NewsResponseDto[]> {
+  ): Promise<PaginationResponseDto<NewsResponseDto>> {
     const user = req.user;
+    const count = await this.newsService.getNewsCount(user.id, param.schoolId);
 
-    return this.newsService.getNewsList(
-      user.id,
-      param.schoolId,
-      query.page,
-      query.limit,
-    );
+    if (!count) {
+      return {
+        totalPage: 0,
+        data: [],
+      };
+    }
+
+    return {
+      totalPage: count,
+      data: await this.newsService.getNewsList(
+        user.id,
+        param.schoolId,
+        query.page,
+        query.limit,
+      ),
+    };
   }
 
   @UseAdminsToken()
