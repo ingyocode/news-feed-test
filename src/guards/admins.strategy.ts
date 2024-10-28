@@ -7,19 +7,20 @@ import { AdminGuardStrategy } from 'src/commons/admin-strategy-const';
 import { AdminsTokenInterface } from 'src/modules/auth/interfaces/admins-token.interface';
 
 @Injectable()
-export class AdminStrategy extends PassportStrategy(Strategy, AdminGuardStrategy) {
-  constructor(
-    private readonly configService: ConfigService
-  ) {
+export class AdminStrategy extends PassportStrategy(
+  Strategy,
+  AdminGuardStrategy,
+) {
+  constructor(private readonly configService: ConfigService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: configService.get<string>('jwt.secretKey')
+      secretOrKey: configService.get<string>('jwt.secretKey'),
     });
   }
 
   async validate(token: AdminsTokenInterface) {
     try {
-      if(!token.isAdmin) {
+      if (!token.isAdmin) {
         throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
       }
 

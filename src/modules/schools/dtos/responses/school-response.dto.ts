@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { SchoolsEntity } from "src/models/schools.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { SchoolsEntity } from 'src/models/schools.entity';
 
 export class SchoolInfoResponseDto extends SchoolsEntity {
   @ApiProperty({ description: 'school id' })

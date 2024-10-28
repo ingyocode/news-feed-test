@@ -1,22 +1,22 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { NewsEntity } from "src/models/news.entity";
-import { AdminsTokenInterface } from "../auth/interfaces/admins-token.interface";
-import { SchoolsService } from "../schools/schools.service";
-import { CreateNewsRequestBodyDto } from "./dtos/requests/create-news-request-body.dto";
-import { SchoolIdRequestParamDto } from "./dtos/requests/school-id-request-param.dto";
-import { NewsController } from "./news.controller";
-import { NewsService } from "./news.service";
-import { SchoolsEntity } from "src/models/schools.entity";
-import { DatabaseConfigModule } from "../databases/databases.module";
-import { GlobalConfigModule } from "../configs/global-config.module";
-import { StudentSubscribesEntity } from "src/models/student-subscribes.entity";
-import { CreateSuccessNewsResponseDto } from "./dtos/responses/create-success-news-response.dto";
-import { SchoolNewsIdRequestParamDto } from "./dtos/requests/school-news-id-request-param.dto";
-import { UpdateNewsRequestBodyDto } from "./dtos/requests/update-news-request-body.dto";
-import { NewsFeedsModule } from "../\bnews-feeds/news-feeds.module";
+import { NewsEntity } from 'src/models/news.entity';
+import { AdminsTokenInterface } from '../auth/interfaces/admins-token.interface';
+import { SchoolsService } from '../schools/schools.service';
+import { CreateNewsRequestBodyDto } from './dtos/requests/create-news-request-body.dto';
+import { SchoolIdRequestParamDto } from './dtos/requests/school-id-request-param.dto';
+import { NewsController } from './news.controller';
+import { NewsService } from './news.service';
+import { SchoolsEntity } from 'src/models/schools.entity';
+import { DatabaseConfigModule } from '../databases/databases.module';
+import { GlobalConfigModule } from '../configs/global-config.module';
+import { StudentSubscribesEntity } from 'src/models/student-subscribes.entity';
+import { CreateSuccessNewsResponseDto } from './dtos/responses/create-success-news-response.dto';
+import { SchoolNewsIdRequestParamDto } from './dtos/requests/school-news-id-request-param.dto';
+import { UpdateNewsRequestBodyDto } from './dtos/requests/update-news-request-body.dto';
+import { NewsFeedsModule } from '../\bnews-feeds/news-feeds.module';
 
 describe('NewsController Test', () => {
   let newsController: NewsController;
@@ -36,10 +36,7 @@ describe('NewsController Test', () => {
         ]),
       ],
       controllers: [NewsController],
-      providers: [
-        NewsService,
-        SchoolsService,
-      ],
+      providers: [NewsService, SchoolsService],
     }).compile();
 
     newsController = module.get<NewsController>(NewsController);
@@ -47,31 +44,31 @@ describe('NewsController Test', () => {
     newsService = module.get<NewsService>(NewsService);
   });
 
-   describe('POST /news/:schoolId', () => {
-    const decodedToken: { user:AdminsTokenInterface } = { 
-      user: { 
+  describe('POST /news/:schoolId', () => {
+    const decodedToken: { user: AdminsTokenInterface } = {
+      user: {
         id: 'adminId',
-        email: 'admin@gmail.com', 
-        name: 'testAdmin', 
-        isAdmin: true 
-      }
+        email: 'admin@gmail.com',
+        name: 'testAdmin',
+        isAdmin: true,
+      },
     };
     const exampleRequestBody: CreateNewsRequestBodyDto = {
       title: 'testTitle',
       content: 'testContent',
     };
-    const exampleRequestParams:SchoolIdRequestParamDto = {
+    const exampleRequestParams: SchoolIdRequestParamDto = {
       schoolId: 1,
     };
     const exampleCreateSuccessResponse: NewsEntity = {
       id: 0,
       schoolId: 0,
-      writerId: "testWriter",
-      title: "testTiel",
-      content: "testContent",
+      writerId: 'testWriter',
+      title: 'testTiel',
+      content: 'testContent',
       isDeleted: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     it('request invalid school id', async () => {
@@ -80,7 +77,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(undefined);
 
       await expect(async () => {
-        await newsController.createSchoolNews(decodedToken, exampleRequestParams, exampleRequestBody);
+        await newsController.createSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('invalid school id', HttpStatus.BAD_REQUEST),
       );
@@ -90,12 +91,12 @@ describe('NewsController Test', () => {
     it('request from unauthorized users', async () => {
       const exampleSchoolInfo: SchoolsEntity = {
         id: 0,
-        adminId: "wrongAdminId",
-        region: "testRegion",
-        name: "testName",
+        adminId: 'wrongAdminId',
+        region: 'testRegion',
+        name: 'testName',
         isDeleted: false,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -103,7 +104,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(exampleSchoolInfo);
 
       await expect(async () => {
-        await newsController.createSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+        await newsController.createSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('can not access this school', HttpStatus.FORBIDDEN),
       );
@@ -114,11 +119,11 @@ describe('NewsController Test', () => {
       const exampleSchoolInfo: SchoolsEntity = {
         id: 0,
         adminId: decodedToken.user.id,
-        region: "testRegion",
-        name: "testName",
+        region: 'testRegion',
+        name: 'testName',
         isDeleted: false,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -129,7 +134,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(false);
 
       await expect(async () => {
-        await newsController.createSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+        await newsController.createSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('failed to save news', HttpStatus.CONFLICT),
       );
@@ -141,11 +150,11 @@ describe('NewsController Test', () => {
       const exampleSchoolInfo: SchoolsEntity = {
         id: 0,
         adminId: decodedToken.user.id,
-        region: "testRegion",
-        name: "testName",
+        region: 'testRegion',
+        name: 'testName',
         isDeleted: false,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -155,50 +164,54 @@ describe('NewsController Test', () => {
         .spyOn(newsService, 'createNews')
         .mockResolvedValue(exampleCreateSuccessResponse);
 
-      const result = await newsController.createSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+      const result = await newsController.createSchoolNews(
+        decodedToken,
+        exampleRequestParams,
+        exampleRequestBody,
+      );
 
-      expect(result).toEqual(exampleCreateSuccessResponse)
+      expect(result).toEqual(exampleCreateSuccessResponse);
       expect(schoolsServicegetSchoolWithIdSpy).toHaveBeenCalled();
       expect(newsServiceCreateNewsSpy).toHaveBeenCalled();
     });
   });
 
   describe('PUT /news/:schoolId/:newsId', () => {
-    const decodedToken: { user:AdminsTokenInterface } = { 
-      user: { 
+    const decodedToken: { user: AdminsTokenInterface } = {
+      user: {
         id: 'adminId',
-        email: 'admin@gmail.com', 
-        name: 'testAdmin', 
-        isAdmin: true 
-      }
+        email: 'admin@gmail.com',
+        name: 'testAdmin',
+        isAdmin: true,
+      },
     };
     const exampleRequestBody: UpdateNewsRequestBodyDto = {
       title: 'testTitle',
       content: 'testContent',
     };
-    const exampleRequestParams:SchoolNewsIdRequestParamDto = {
+    const exampleRequestParams: SchoolNewsIdRequestParamDto = {
       schoolId: 1,
       newsId: 1,
     };
     const exampleSchoolInfo: SchoolsEntity = {
       id: 0,
       adminId: decodedToken.user.id,
-      region: "testRegion",
-      name: "testName",
+      region: 'testRegion',
+      name: 'testName',
       isDeleted: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     const exampleNewsInfo: NewsEntity = {
       id: 0,
       schoolId: 1,
-      writerId: "testAdmin",
-      title: "testNews",
-      content: "testContent",
+      writerId: 'testAdmin',
+      title: 'testNews',
+      content: 'testContent',
       isDeleted: false,
       createdAt: undefined,
-      updatedAt: undefined
-    }
+      updatedAt: undefined,
+    };
 
     it('request invalid school id', async () => {
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -206,7 +219,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(undefined);
 
       await expect(async () => {
-        await newsController.editSchoolNews(decodedToken, exampleRequestParams, exampleRequestBody);
+        await newsController.editSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('invalid school id', HttpStatus.BAD_REQUEST),
       );
@@ -216,12 +233,12 @@ describe('NewsController Test', () => {
     it('request from unauthorized users', async () => {
       const exampleWrongSchoolInfo: SchoolsEntity = {
         id: 0,
-        adminId: "wrongAdminId",
-        region: "testRegion",
-        name: "testName",
+        adminId: 'wrongAdminId',
+        region: 'testRegion',
+        name: 'testName',
         isDeleted: false,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -229,7 +246,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(exampleWrongSchoolInfo);
 
       await expect(async () => {
-        await newsController.editSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+        await newsController.editSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('can not access this school', HttpStatus.FORBIDDEN),
       );
@@ -241,11 +262,15 @@ describe('NewsController Test', () => {
         .spyOn(schoolsService, 'getSchoolWithId')
         .mockResolvedValue(exampleSchoolInfo);
       const newsServiceGetNewsWithIdSpy = jest
-      .spyOn(newsService, 'getNewsWithId')
-      .mockResolvedValue(undefined);
+        .spyOn(newsService, 'getNewsWithId')
+        .mockResolvedValue(undefined);
 
       await expect(async () => {
-        await newsController.editSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+        await newsController.editSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('invalid news id', HttpStatus.BAD_REQUEST),
       );
@@ -265,7 +290,11 @@ describe('NewsController Test', () => {
         .mockResolvedValue(false);
 
       await expect(async () => {
-        await newsController.editSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
+        await newsController.editSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+          exampleRequestBody,
+        );
       }).rejects.toThrow(
         new HttpException('failed to update news', HttpStatus.CONFLICT),
       );
@@ -275,7 +304,7 @@ describe('NewsController Test', () => {
     });
 
     it('success to update news', async () => {
-      const successResponse:CreateSuccessNewsResponseDto = { result: true };
+      const successResponse: CreateSuccessNewsResponseDto = { result: true };
 
       const schoolsServicegetSchoolWithIdSpy = jest
         .spyOn(schoolsService, 'getSchoolWithId')
@@ -283,14 +312,17 @@ describe('NewsController Test', () => {
       const newsServiceGetNewsWithIdSpy = jest
         .spyOn(newsService, 'getNewsWithId')
         .mockResolvedValue(exampleNewsInfo);
-        const newsServiceUpdateSpy = jest
+      const newsServiceUpdateSpy = jest
         .spyOn(newsService, 'updateNews')
         .mockResolvedValue(true);
 
+      const result = await newsController.editSchoolNews(
+        decodedToken,
+        exampleRequestParams,
+        exampleRequestBody,
+      );
 
-      const result = await newsController.editSchoolNews(decodedToken, exampleRequestParams,exampleRequestBody);
-
-      expect(result).toEqual(successResponse)
+      expect(result).toEqual(successResponse);
       expect(schoolsServicegetSchoolWithIdSpy).toHaveBeenCalled();
       expect(newsServiceUpdateSpy).toHaveBeenCalled();
       expect(newsServiceGetNewsWithIdSpy).toHaveBeenCalled();
@@ -298,37 +330,37 @@ describe('NewsController Test', () => {
   });
 
   describe('DELETE /news/:schoolId/:newsId', () => {
-    const decodedToken: { user:AdminsTokenInterface } = { 
-      user: { 
+    const decodedToken: { user: AdminsTokenInterface } = {
+      user: {
         id: 'adminId',
-        email: 'admin@gmail.com', 
-        name: 'testAdmin', 
-        isAdmin: true 
-      }
+        email: 'admin@gmail.com',
+        name: 'testAdmin',
+        isAdmin: true,
+      },
     };
-    const exampleRequestParams:SchoolNewsIdRequestParamDto = {
+    const exampleRequestParams: SchoolNewsIdRequestParamDto = {
       schoolId: 1,
       newsId: 1,
     };
     const exampleSchoolInfo: SchoolsEntity = {
       id: 0,
       adminId: decodedToken.user.id,
-      region: "testRegion",
-      name: "testName",
+      region: 'testRegion',
+      name: 'testName',
       isDeleted: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
     const exampleNewsInfo: NewsEntity = {
       id: 0,
       schoolId: 1,
-      writerId: "testAdmin",
-      title: "testNews",
-      content: "testContent",
+      writerId: 'testAdmin',
+      title: 'testNews',
+      content: 'testContent',
       isDeleted: false,
       createdAt: undefined,
-      updatedAt: undefined
-    }
+      updatedAt: undefined,
+    };
 
     it('request invalid school id', async () => {
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -336,7 +368,10 @@ describe('NewsController Test', () => {
         .mockResolvedValue(undefined);
 
       await expect(async () => {
-        await newsController.deleteSchoolNews(decodedToken, exampleRequestParams,);
+        await newsController.deleteSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+        );
       }).rejects.toThrow(
         new HttpException('invalid school id', HttpStatus.BAD_REQUEST),
       );
@@ -346,12 +381,12 @@ describe('NewsController Test', () => {
     it('request from unauthorized users', async () => {
       const exampleWrongSchoolInfo: SchoolsEntity = {
         id: 0,
-        adminId: "wrongAdminId",
-        region: "testRegion",
-        name: "testName",
+        adminId: 'wrongAdminId',
+        region: 'testRegion',
+        name: 'testName',
         isDeleted: false,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const schoolsServicegetSchoolWithIdSpy = jest
@@ -359,7 +394,10 @@ describe('NewsController Test', () => {
         .mockResolvedValue(exampleWrongSchoolInfo);
 
       await expect(async () => {
-        await newsController.deleteSchoolNews(decodedToken, exampleRequestParams);
+        await newsController.deleteSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+        );
       }).rejects.toThrow(
         new HttpException('can not access this school', HttpStatus.FORBIDDEN),
       );
@@ -371,11 +409,14 @@ describe('NewsController Test', () => {
         .spyOn(schoolsService, 'getSchoolWithId')
         .mockResolvedValue(exampleSchoolInfo);
       const newsServiceGetNewsWithIdSpy = jest
-      .spyOn(newsService, 'getNewsWithId')
-      .mockResolvedValue(undefined);
+        .spyOn(newsService, 'getNewsWithId')
+        .mockResolvedValue(undefined);
 
       await expect(async () => {
-        await newsController.deleteSchoolNews(decodedToken, exampleRequestParams);
+        await newsController.deleteSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+        );
       }).rejects.toThrow(
         new HttpException('invalid news id', HttpStatus.BAD_REQUEST),
       );
@@ -395,7 +436,10 @@ describe('NewsController Test', () => {
         .mockResolvedValue(false);
 
       await expect(async () => {
-        await newsController.deleteSchoolNews(decodedToken, exampleRequestParams);
+        await newsController.deleteSchoolNews(
+          decodedToken,
+          exampleRequestParams,
+        );
       }).rejects.toThrow(
         new HttpException('failed to delete news', HttpStatus.CONFLICT),
       );
@@ -405,7 +449,7 @@ describe('NewsController Test', () => {
     });
 
     it('success to delete news', async () => {
-      const successResponse:CreateSuccessNewsResponseDto = { result: true };
+      const successResponse: CreateSuccessNewsResponseDto = { result: true };
 
       const schoolsServicegetSchoolWithIdSpy = jest
         .spyOn(schoolsService, 'getSchoolWithId')
@@ -413,14 +457,16 @@ describe('NewsController Test', () => {
       const newsServiceGetNewsWithIdSpy = jest
         .spyOn(newsService, 'getNewsWithId')
         .mockResolvedValue(exampleNewsInfo);
-        const newsServiceDeleteSpy = jest
+      const newsServiceDeleteSpy = jest
         .spyOn(newsService, 'deleteNews')
         .mockResolvedValue(true);
 
+      const result = await newsController.deleteSchoolNews(
+        decodedToken,
+        exampleRequestParams,
+      );
 
-      const result = await newsController.deleteSchoolNews(decodedToken, exampleRequestParams);
-
-      expect(result).toEqual(successResponse)
+      expect(result).toEqual(successResponse);
       expect(schoolsServicegetSchoolWithIdSpy).toHaveBeenCalled();
       expect(newsServiceDeleteSpy).toHaveBeenCalled();
       expect(newsServiceGetNewsWithIdSpy).toHaveBeenCalled();

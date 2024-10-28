@@ -1,5 +1,5 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { NewsEntity } from "src/models/news.entity";
+import { ApiProperty } from '@nestjs/swagger';
+import { NewsEntity } from 'src/models/news.entity';
 
 export class NewsResponseDto extends NewsEntity {
   @ApiProperty({ description: 'news id' })

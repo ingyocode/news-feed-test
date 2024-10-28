@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { SchoolsEntity } from 'src/models/schools.entity';
 import { StudentSubscribesEntity } from 'src/models/student-subscribes.entity';
 
-
 @Injectable()
 export class SchoolsService {
   constructor(
@@ -20,7 +19,7 @@ export class SchoolsService {
         region,
         name,
         isDeleted: false,
-      }
+      },
     });
   }
 
@@ -28,7 +27,10 @@ export class SchoolsService {
     try {
       await this.schoolsRepository.upsert(
         { region, name, adminId, isDeleted: false },
-        { conflictPaths: ['region', 'name'], upsertType: 'on-conflict-do-update' }
+        {
+          conflictPaths: ['region', 'name'],
+          upsertType: 'on-conflict-do-update',
+        },
       );
       return true;
     } catch (err) {
@@ -37,17 +39,20 @@ export class SchoolsService {
   }
 
   async getSubscribeList(schoolId: number): Promise<StudentSubscribesEntity[]> {
-    const subscribeList: StudentSubscribesEntity[] = await this.studentSubscribesRepository.find({
-      where: {
-        schoolId,
-        isDeleted: false,
-      }
-    });
+    const subscribeList: StudentSubscribesEntity[] =
+      await this.studentSubscribesRepository.find({
+        where: {
+          schoolId,
+          isDeleted: false,
+        },
+      });
 
     return subscribeList;
   }
 
-  async getUserSubscribedSchoolList(studentId: string): Promise<SchoolsEntity[]> {
+  async getUserSubscribedSchoolList(
+    studentId: string,
+  ): Promise<SchoolsEntity[]> {
     const subscribeList = await this.studentSubscribesRepository.find({
       select: {
         schoolId: true,
@@ -62,17 +67,20 @@ export class SchoolsService {
       where: {
         id: In(subscribeList.map((subscribe) => subscribe.schoolId)),
         isDeleted: false,
-      }
+      },
     });
   }
 
-  async getSubscribedSchool(studentId: string, schoolId: number): Promise<StudentSubscribesEntity> {
+  async getSubscribedSchool(
+    studentId: string,
+    schoolId: number,
+  ): Promise<StudentSubscribesEntity> {
     return this.studentSubscribesRepository.findOne({
       where: {
         studentId,
         schoolId,
         isDeleted: false,
-      }
+      },
     });
   }
 
@@ -80,8 +88,11 @@ export class SchoolsService {
     try {
       await this.studentSubscribesRepository.upsert(
         { studentId, schoolId, isDeleted: false },
-        { conflictPaths: ['studentId', 'schoolId'], upsertType: 'on-conflict-do-update' },
-      )
+        {
+          conflictPaths: ['studentId', 'schoolId'],
+          upsertType: 'on-conflict-do-update',
+        },
+      );
       return true;
     } catch (err) {
       return false;
@@ -92,7 +103,10 @@ export class SchoolsService {
     try {
       await this.studentSubscribesRepository.upsert(
         { studentId, schoolId, isDeleted: true },
-        { conflictPaths: ['studentId', 'schoolId'], upsertType: 'on-conflict-do-update' },
+        {
+          conflictPaths: ['studentId', 'schoolId'],
+          upsertType: 'on-conflict-do-update',
+        },
       );
       return true;
     } catch (err) {

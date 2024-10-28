@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PaginationResponseDto<T> {
   @ApiProperty({ description: 'offset pagination total page' })

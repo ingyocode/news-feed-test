@@ -5,7 +5,7 @@ using TypeORM
 
 ## docs
 
-- using [scalar](https://www.npmjs.com/package/scalar) for Open API Specification
+- using Swagger for Open API Specification
 
 ## 구현
 

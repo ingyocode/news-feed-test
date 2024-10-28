@@ -18,7 +18,7 @@ export class AdminsService {
       where: {
         email,
         isDeleted: false,
-      }
+      },
     });
   }
 
@@ -31,10 +31,10 @@ export class AdminsService {
         email: params.email,
         name: params.name,
         password: passwordInfo.password,
-        salt: passwordInfo.salt
+        salt: passwordInfo.salt,
       });
       return true;
-    } catch(err) {
+    } catch (err) {
       return false;
     }
   }
@@ -45,7 +45,8 @@ export class AdminsService {
   ): { password: string; salt: string } {
     const salt = passwordSalt || randomBytes(64).toString('base64'),
       encryptPassword =
-        password && pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
+        password &&
+        pbkdf2Sync(password, salt, 131072, 64, 'sha512').toString('base64');
     return {
       password: encryptPassword,
       salt,
