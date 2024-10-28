@@ -22,6 +22,14 @@ export class NewsService {
     });
   }
 
+  async getNewsCount(studentId: string, schoolId: number) {
+    return this.newsRepository
+      .createQueryBuilder('news')
+      .select('news.id', 'id')
+      .groupBy('news.id')
+      .getCount();
+  }
+
   async getNewsList(
     studentId: string,
     schoolId: number,
